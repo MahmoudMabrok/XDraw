@@ -1,10 +1,7 @@
 package view.mahmoudmabrok.xdraw
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -19,7 +16,13 @@ class XDraw(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     var mCircleX = 10f
     var mCircleY = 10f
     var paint: Paint = Paint().apply {
-        color = 0xffaaff
+        color = Color.GREEN
+        isAntiAlias = true
+        isDither = true
+        style = Paint.Style.STROKE
+        strokeCap = Paint.Cap.ROUND
+        strokeJoin = Paint.Join.ROUND
+        strokeWidth = 12f
     }
 
     private var motionX = 0f
@@ -76,12 +79,24 @@ class XDraw(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 currentX, currentY,
                 (currentX + motionX) / 2, (currentY + motionY) / 2
             )
+            //  path.lineTo(motionX,motionY)
             currentX = motionX
             currentY = motionY
+            changePaint()
             extraCanvas.drawPath(path, paint)
         }
 
         invalidate()
+    }
+
+    private fun changePaint() {
+        val r = java.util.Random().nextInt(3)
+        paint.color = when (r) {
+            0 -> Color.RED
+            1 -> Color.GREEN
+            2 -> Color.BLUE
+            else -> Color.BLACK
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
